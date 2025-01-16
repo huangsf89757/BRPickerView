@@ -531,6 +531,11 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 }
 
 - (NSString *)getYearNumber:(NSInteger)year {
+    if (![self.pickerStyle.language hasPrefix:@"zh"] && (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeYM || self.pickerMode == BRDatePickerModeYMW)) {
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+        formatter.locale = [[NSLocale alloc]initWithLocaleIdentifier:self.pickerStyle.language];
+        return [formatter stringFromNumber: @(year)];
+    }
     NSString *yearString = [NSString stringWithFormat:@"%@", @(year)];
     if (self.isNumberFullName) {
         yearString = [NSString stringWithFormat:@"%04d", [yearString intValue]];
