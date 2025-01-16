@@ -531,10 +531,8 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 }
 
 - (NSString *)getYearNumber:(NSInteger)year {
-    if (![self.pickerStyle.language hasPrefix:@"zh"] && (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeYM || self.pickerMode == BRDatePickerModeYMW)) {
-        NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
-        formatter.locale = [[NSLocale alloc]initWithLocaleIdentifier:self.pickerStyle.language];
-        return [formatter stringFromNumber: @(year)];
+    if (self.formatBlock) {
+        return self.formatBlock(year);
     }
     NSString *yearString = [NSString stringWithFormat:@"%@", @(year)];
     if (self.isNumberFullName) {
@@ -544,6 +542,9 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
 }
 
 - (NSString *)getMDHMSNumber:(NSInteger)number {
+    if (self.formatBlock) {
+        return self.formatBlock(number);
+    }
     NSString *string = [NSString stringWithFormat:@"%@", @(number)];
     if (self.isNumberFullName) {
         string = [NSString stringWithFormat:@"%02d", [string intValue]];
